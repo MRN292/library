@@ -1,4 +1,5 @@
 <?php
+// session_start();
 
 require 'FUNC_VALID.php';
 require 'CRUD.php';
@@ -30,7 +31,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         CREATE_TABLE_ADMIN('library', 'Admins');
 
         INSERT_ADMIN('library', 'Admins', $username, $password);
-        header("Refresh:0; url=AdminSignin.php");
+        // header("Refresh:0; url=AdminSignin.php");
+
+        CREATE_SESSION("admin");
+        header("Location:admin.php");
     }
 
 

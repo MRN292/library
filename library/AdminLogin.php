@@ -1,7 +1,11 @@
 <?php
 
+// session_start();
+require 'FUNC_VALID.php';
+
 require 'CRUD.php';
-session_start();
+
+$_SESSION["admin"] = "";
 
 
 
@@ -16,14 +20,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         while ($row = mysqli_fetch_assoc($query)) {
             if ($row['password'] == $tmp2) {
-
-                // $_SESSION["user"] = $username;
-                // $_SESSION["login_time_stamp"] = time();
+        
+                CREATE_SESSION("admin");
                 header("Location:admin.php");
-                
 
-
-            }else{
+            } else {
                 $Err = "نام کاربری یا کلمه عبور اشتباه است";
             }
         }
@@ -76,7 +77,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="d-flex">
                     <label class="col-sm-1 col-form-label">نام کاربری :</label>
                     <div class="col-sm-5">
-                        <input dir="ltr" type="text" class="form-control" name="username"   value="<?php if(isset($_POST['username'])){echo $_POST['username'];} ?>">
+                        <input dir="ltr" type="text" class="form-control" name="username"
+                            value="<?php if (isset($_POST['username'])) {
+                                echo $_POST['username'];
+                            } ?>">
                     </div>
                 </div>
 
@@ -84,11 +88,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="d-flex" style="margin-top:0.5%">
                     <label class="col-sm-1 col-form-label">کلمه عبور :</label>
                     <div class="col-sm-5">
-                        <input dir="ltr" type="password" class="form-control" name="password"   value="<?php if(isset($_POST['password'])){echo $_POST['password'];} ?>">
+                        <input dir="ltr" type="password" class="form-control" name="password"
+                            value="<?php if (isset($_POST['password'])) {
+                                echo $_POST['password'];
+                            } ?>">
                     </div>
                 </div>
             </center>
-            
+
 
             <center style="margin-top:0.5%">
                 <div class="col-sm-3 d-grid " style="margin-top:0.1%">
@@ -99,6 +106,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </form>
 
     </div>
+    <center>
+
+        <a class="btn btn-danger" href="/library/Login.php" role="button">بازگشت</a>
+    </center>
 </body>
 
 </html>

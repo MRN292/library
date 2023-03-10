@@ -1,4 +1,12 @@
 <?php
+
+session_start();
+
+
+if(VALID_SESSION('admin')==false){
+    header("location:AdminLogin.php");
+}
+
 $nameErr = $imgErr = $writerErr = $genreErr = "";
 require 'FUNC_VALID.php';
 require 'CRUD.php';

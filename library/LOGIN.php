@@ -1,5 +1,7 @@
 <?php
 session_start();
+$_SESSION["username"] ="";
+
 
 require 'CRUD.php';
 // session_start();
@@ -20,7 +22,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 
                 if($row['varify']=='1'){
                     if($row['permission']==1){
-                        $_SESSION["username"] = $username;
+                        CREATE_SESSION("user");
+
                         header("Location:user.php");
                     }else{
                         $Err  = "حساب کاربری شما مسدود شده";

@@ -1,9 +1,14 @@
 <?php
+
+
 require 'FUNC_VALID.php';
 require 'CRUD.php';
 CREATE_DATABASE('library');
 CREATE_TABLE_USER('library', 'Users');
 
+if(VALID_SESSION('admin')==false){
+    header("location:AdminLogin.php");
+}
 
 
 ?>

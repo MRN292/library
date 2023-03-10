@@ -1,5 +1,6 @@
 <?php
-function VALID_NAME($input){
+function VALID_NAME($input)
+{
 
 
     $array = [];
@@ -9,14 +10,15 @@ function VALID_NAME($input){
         $array[0] = true;
         return $array;
 
-    }else{
-                $name = test_input($input);
+    } else {
+        $name = test_input($input);
         if (!preg_match("/^[a-zA-Z][a-zA-Z-' ]{2,20}[a-zA-Z]$/", $name)) {
             $array[1] = "Invalid name";
             $array[0] = true;
             return $array;
         }
-    }    return $name;
+    }
+    return $name;
 }
 
 
@@ -322,5 +324,26 @@ function VALID_FILE($file)
     return $fileName;
 
 }
+
+
+function CREATE_SESSION($input="DEFAULT")
+{
+    session_start();
+
+    $_SESSION["$input"] = $input;
+    $_SESSION["$input"."_login_time"] = time();
+}
+function VALID_SESSION($input="DEFAULT" , $time = 60){
+    session_start();
+    if(empty($_SESSION["$input"])){
+        return false;
+    }
+    if(time() - $_SESSION["$input"."_login_time"] > $time){
+        return false;
+    }
+    return true;
+}
+
+
 
 ?>

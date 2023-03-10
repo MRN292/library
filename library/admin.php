@@ -1,10 +1,23 @@
 <?php
+
+
 $nameErr = $imgErr = "";
 require 'FUNC_VALID.php';
 require 'CRUD.php';
+// if(empty($_SESSION['admin'])&& (time()-$_SESSION['login_time_stamp'] > 60)){
+//     
+// }
 
 
 
+if(VALID_SESSION('admin')==false){
+    header("location:AdminLogin.php");
+}
+// echo var_dump(VALID_SESSION('admin', 5));
+// echo $_SESSION['admin'];
+// if($out==0){
+//     echo 222;
+// }
 
 ?>
 
@@ -33,6 +46,13 @@ require 'CRUD.php';
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                 <a class="btn btn-outline-primary" href="/library/showBooks.php" role="button">لیست کتاب ها</a>
                 <a class="btn btn-outline-primary" href="/library/showUsers.php" role="button">لیست کاربران</a>
+            </form>
+        </center>
+        <br>
+        <center>
+            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+                <a class="btn btn-danger" href="/library/AdminLogin.php" role="button">خروج</a>
+                
             </form>
         </center>
 

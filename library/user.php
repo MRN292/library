@@ -2,6 +2,10 @@
 session_start();
 // echo $_SESSION['username'];
 
+
+if(VALID_SESSION('user')==false){
+    header("Location:LOGIN.php");
+}
 require 'FUNC_VALID.php';
 require 'CRUD.php';
 CREATE_DATABASE('library');
