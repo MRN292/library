@@ -1,18 +1,19 @@
 <?php
-session_start();
+
 // echo $_SESSION['username'];
-
-
-if(VALID_SESSION('user')==false){
-    header("Location:LOGIN.php");
-}
 require 'FUNC_VALID.php';
 require 'CRUD.php';
+
+if (VALID_SESSION('user') == false) {
+    header("Location:LOGIN.php");
+}
+
 CREATE_DATABASE('library');
 CREATE_TABLE_RENTED_RECEIVE('library', 'RandR');
-
-
-
+$InUser;
+if (isset($_GET['username'])) {
+    $InUser = $_GET['username'];
+}
 
 ?>
 
@@ -127,16 +128,16 @@ CREATE_TABLE_RENTED_RECEIVE('library', 'RandR');
 
 
             <input type="submit" class="btn btn-primary btn-sm" name="filter" value="فیلتر کردن">
-            <a href="/library/user.php" class="btn btn-danger  btn-sm" role="button">تازه سازی</a>
+            <a href="/library/user.php?username=<?php echo $InUser; ?>" class="btn btn-danger  btn-sm" role="button">تازه سازی</a>
         </form>
     </div>
 
     <hr>
 
     <form action="EditUser.php" method="post">
-        <button name="edituser" value="<?php echo $_SESSION['username'] ;?>" class="btn btn-outline-success">ویرایش
+        <button name="edituser" value="<?php echo $InUser; ?>" class="btn btn-outline-success">ویرایش
             اطلاعات</button>
-        <a href="/library/myBooks.php" class="btn btn-outline-primary">کتاب های من</a>
+        <a href="/library/myBooks.php?username=<?php echo $InUser; ?>" class="btn btn-outline-primary">کتاب های من</a>
     </form>
 
 
@@ -196,8 +197,11 @@ CREATE_TABLE_RENTED_RECEIVE('library', 'RandR');
                                 <?php echo $stock; ?>
                             </td>
                             <td>
-                                <form method='post' class='d-sm-inline-flex'>
-                                    <button name="rent" value="<?php echo $id; ?>" class="btn btn-outline-dark">اجاره</button>
+                                <?php $data = array($id, $InUser); ?>
+
+                                <form action="bookOperation.php" method='post' class='d-sm-inline-flex'>
+                                    <button name="rent" value="<?php echo htmlspecialchars(json_encode($data)); ?>"
+                                        class="btn btn-outline-dark">اجاره</button>
                                 </form>
 
                             </td>
@@ -253,8 +257,11 @@ CREATE_TABLE_RENTED_RECEIVE('library', 'RandR');
                                         <?php echo $stock; ?>
                                     </td>
                                     <td>
-                                        <form method='post' class='d-sm-inline-flex'>
-                                            <button name="rent" value="<?php echo $id; ?>" class="btn btn-outline-dark">اجاره</button>
+                                        <?php $data = array($id, $InUser); ?>
+
+                                        <form action="bookOperation.php" method='post' class='d-sm-inline-flex'>
+                                            <button name="rent" value="<?php echo htmlspecialchars(json_encode($data)); ?>"
+                                                class="btn btn-outline-dark">اجاره</button>
                                         </form>
 
                                     </td>
@@ -304,8 +311,11 @@ CREATE_TABLE_RENTED_RECEIVE('library', 'RandR');
                                         <?php echo $stock; ?>
                                     </td>
                                     <td>
-                                        <form method='post' class='d-sm-inline-flex'>
-                                            <button name="rent" value="<?php echo $id; ?>" class="btn btn-outline-dark">اجاره</button>
+                                        <?php $data = array($id, $InUser); ?>
+
+                                        <form action="bookOperation.php" method='post' class='d-sm-inline-flex'>
+                                            <button name="rent" value="<?php echo htmlspecialchars(json_encode($data)); ?>"
+                                                class="btn btn-outline-dark">اجاره</button>
                                         </form>
 
                                     </td>
@@ -355,8 +365,11 @@ CREATE_TABLE_RENTED_RECEIVE('library', 'RandR');
                                         <?php echo $stock; ?>
                                     </td>
                                     <td>
-                                        <form method='post' class='d-sm-inline-flex'>
-                                            <button name="rent" value="<?php echo $id; ?>" class="btn btn-outline-dark">اجاره</button>
+                                        <?php $data = array($id, $InUser); ?>
+
+                                        <form action="bookOperation.php" method='post' class='d-sm-inline-flex'>
+                                            <button name="rent" value="<?php echo htmlspecialchars(json_encode($data)); ?>"
+                                                class="btn btn-outline-dark">اجاره</button>
                                         </form>
 
                                     </td>
@@ -406,8 +419,11 @@ CREATE_TABLE_RENTED_RECEIVE('library', 'RandR');
                                         <?php echo $stock; ?>
                                     </td>
                                     <td>
-                                        <form method='post' class='d-sm-inline-flex'>
-                                            <button name="rent" value="<?php echo $id; ?>" class="btn btn-outline-dark">اجاره</button>
+                                        <?php $data = array($id, $InUser); ?>
+
+                                        <form action="bookOperation.php" method='post' class='d-sm-inline-flex'>
+                                            <button name="rent" value="<?php echo htmlspecialchars(json_encode($data)); ?>"
+                                                class="btn btn-outline-dark">اجاره</button>
                                         </form>
                                     </td>
                                 </tr>
@@ -457,8 +473,11 @@ CREATE_TABLE_RENTED_RECEIVE('library', 'RandR');
                                         <?php echo $stock; ?>
                                     </td>
                                     <td>
-                                        <form method='post' class='d-sm-inline-flex'>
-                                            <button name="rent" value="<?php echo $id; ?>" class="btn btn-outline-dark">اجاره</button>
+                                        <?php $data = array($id, $InUser); ?>
+
+                                        <form action="bookOperation.php" method='post' class='d-sm-inline-flex'>
+                                            <button name="rent" value="<?php echo htmlspecialchars(json_encode($data)); ?>"
+                                                class="btn btn-outline-dark">اجاره</button>
                                         </form>
 
                                     </td>
@@ -510,8 +529,11 @@ CREATE_TABLE_RENTED_RECEIVE('library', 'RandR');
                                             <?php echo $stock; ?>
                                         </td>
                                         <td>
+                                            <?php $data = array($id, $InUser); ?>
+
                                             <form action="bookOperation.php" method='post' class='d-sm-inline-flex'>
-                                                <button name="rent" value="<?php echo $id; ?>" class="btn btn-outline-dark">اجاره</button>
+                                                <button name="rent" value="<?php echo htmlspecialchars(json_encode($data)); ?>"
+                                                    class="btn btn-outline-dark">اجاره</button>
                                             </form>
 
                                         </td>

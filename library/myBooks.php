@@ -1,13 +1,12 @@
 <?php
-session_start();
 // echo $_SESSION['username'];
-
-if(VALID_SESSION('user')==false){
+require 'FUNC_VALID.php';
+require 'CRUD.php';
+if (VALID_SESSION('user') == false) {
     header("Location:LOGIN.php");
 }
 
-require 'FUNC_VALID.php';
-require 'CRUD.php';
+
 ?>
 
 <!DOCTYPE html>
@@ -43,14 +42,13 @@ require 'CRUD.php';
 
     <center dir="ltr">
         <label class="col-form-label">
-            <?php echo $_SESSION['username'] ?> کتاب های
+            <?php echo $_GET['username'] ?> کتاب های
         </label>
     </center>
 
     <table dir="ltr" class='table table-boarderd'>
         <thead>
             <tr>
-                <th>شناسه</th>
                 <th>نام کتاب</th>
                 <th>عکس کتاب</th>
                 <th>نویسنده کتاب</th>
@@ -65,7 +63,7 @@ require 'CRUD.php';
             $UserId = "";
             $temp = "";
 
-            $quary = SpecialRead("library", "users", "*", "username", $_SESSION['username']);
+            $quary = SpecialRead("library", "users", "*", "username", $_GET['username']);
             while ($res = mysqli_fetch_assoc($quary)) {
                 $UserId = $res['id'];
             }
@@ -89,9 +87,6 @@ require 'CRUD.php';
                         ?>
                         <tr>
                             <td>
-                                <?php echo $id; ?>
-                            </td>
-                            <td>
                                 <img width='30' height='40' src="<?php echo "lib/book/img/" . $img ?>">
                             </td>
                             <td>
@@ -104,9 +99,9 @@ require 'CRUD.php';
                                 <?php echo $genre; ?>
                             </td>
                             <td>
-
+                                <?php $my_array = array($id , $_GET['username']); ?>
                                 <form method='post' class='d-sm-inline-flex' action="/library/bookOperation.php">
-                                    <button name="give" value="<?php echo $id; ?>" class="btn btn-outline-success">تحویل</button>
+                                    <button name="give" value="<?php echo htmlspecialchars(json_encode($my_array)); ?>" class="btn btn-outline-success">تحویل</button>
                                 </form>
 
                             </td>
@@ -125,7 +120,7 @@ require 'CRUD.php';
         </tbody>
 
     </table>
-    <a href="/library/user.php" dir='rtl' class="btn btn-danger">برگشت</a>
+    <a href="/library/user.php?username=<?php echo $_GET['username']; ?>" dir='rtl' class="btn btn-danger">برگشت</a>
 
 
 </body>

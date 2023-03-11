@@ -1,23 +1,26 @@
 <?php   
-session_start();
-// echo $_SESSION['username'];
 
+// echo $_SESSION['username'];
+require 'FUNC_VALID.php';
+require 'CRUD.php';
 if(VALID_SESSION('user')==false){
     header("Location:LOGIN.php");
 }
 
-require 'FUNC_VALID.php';
-require 'CRUD.php';
+// session_start();
 
 
 if (isset($_POST['rent'])) {
 
-    $BookID = $_POST['rent'];
+    $my_array = json_decode($_POST['rent']);
+
+
+    $BookID = $my_array[0];
     $UserId = "";
     $UserRented = "";
     $temp = "";
 
-    $quary = SpecialRead("library", "users", "*", "username", $_SESSION['username']);
+    $quary = SpecialRead("library", "users", "*", "username", $my_array[1]);
     while ($res = mysqli_fetch_assoc($quary)) {
         $UserId = $res['id'];
         $UserRented = $res['rented'];
@@ -40,13 +43,13 @@ if (isset($_POST['rent'])) {
 
         $Err = 1;
 
-        header("Refresh:0; url=user.php?Err=".$Err);
+        header("Refresh:0; url=user.php?Err=$Err&&username=$my_array[1]");
         
 
 
     } else {
         $Err = 2;
-        header("Refresh:0; url=user.php?Err=".$Err);
+        header("Refresh:0; url=user.php?Err=$Err&&username=$my_array[1]");
 
     }
 
@@ -58,7 +61,9 @@ if (isset($_POST['rent'])) {
     // echo $_SESSION['username'];
 }
 if(isset($_POST['give'])){
-    $id = $_POST['give'];
+
+    $my_array = json_decode($_POST['give']);
+    $id = $my_array[0];
     $BookId="";
     $UserId = "";
     $quary = SpecialRead("library", "randr", "*", "id", $id);
@@ -82,7 +87,7 @@ if(isset($_POST['give'])){
         $stock++;
         Update('library', 'Books', 'stock', $stock, $res['id']);
         $Err = 1;
-        header("Refresh:0; url=myBooks.php?Err=".$Err);
+        header("Refresh:0; url=myBooks.php?Err=$Err&&username=$my_array[1]");
 
     }
 

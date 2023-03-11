@@ -1,6 +1,7 @@
 <?php
 
 
+
 $nameErr = $imgErr = "";
 require 'FUNC_VALID.php';
 require 'CRUD.php';

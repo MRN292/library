@@ -1,14 +1,15 @@
 <?php
 
-session_start();
 
+
+require 'FUNC_VALID.php';
+require 'CRUD.php';
 
 if(VALID_SESSION('admin')==false){
     header("location:AdminLogin.php");
 }
 
-require 'FUNC_VALID.php';
-require 'CRUD.php';
+
 
 
 if (isset($_POST['varifyer'])) {

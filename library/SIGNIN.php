@@ -1,5 +1,4 @@
 <?php
-session_start();
 require 'FUNC_VALID.php';
 require 'CRUD.php';
 CREATE_DATABASE('library');
@@ -48,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         INSERT_USER('library', 'Users', $username, $email, $password, $img);
         // header("Refresh:0; url=LOGIN.php");
         CREATE_SESSION("user");
-        header("Location:user.php");
+        header("Location:user.php?username=".$username);
 
 
     }

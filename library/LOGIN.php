@@ -1,7 +1,6 @@
 <?php
-session_start();
-$_SESSION["username"] ="";
 
+require 'FUNC_VALID.php';
 
 require 'CRUD.php';
 // session_start();
@@ -24,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     if($row['permission']==1){
                         CREATE_SESSION("user");
 
-                        header("Location:user.php");
+                        header("Location:user.php?username=$username");
                     }else{
                         $Err  = "حساب کاربری شما مسدود شده";
                     }

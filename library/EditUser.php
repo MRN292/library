@@ -1,14 +1,13 @@
 <?php
 
-session_start();
 // echo $_SESSION['username'];
 
+require 'FUNC_VALID.php';
+require 'CRUD.php';
 if(VALID_SESSION('user')==false){
     header("Location:LOGIN.php");
 }
 
-require 'FUNC_VALID.php';
-require 'CRUD.php';
 // session_start();
 $usernameErr = $emailErr = $passwordErr = $imgErr = "";
 $Tid = $Tusername = $Temail = $Tpassword = $Timg = "";
@@ -78,7 +77,7 @@ if (isset($_POST['edit'])) {
             Update('library', 'users', 'username', $username, $id);
             Update("library", "users", "email", $email, $id);
             Update("library", "users", "img", $img, $id);
-            header("Refresh:0; url=user.php");
+            header("Refresh:0; url=user.php?username=".$username);
 
 
 
@@ -205,7 +204,7 @@ if (isset($_POST['edit'])) {
                         style="margin-top:0.1%">ویرایش</button>
                 </div>
                 <div class="" style="margin-top:0.1%">
-                    <a role="button" class="btn btn-danger" href="/library/user.php">برگشت</a>
+                    <a role="button" class="btn btn-danger" href="/library/user.php?username=<?php echo $_POST['edituser'] ;?>">برگشت</a>
                 </div>
             </center>
 

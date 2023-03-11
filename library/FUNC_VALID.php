@@ -333,7 +333,7 @@ function CREATE_SESSION($input="DEFAULT")
     $_SESSION["$input"] = $input;
     $_SESSION["$input"."_login_time"] = time();
 }
-function VALID_SESSION($input="DEFAULT" , $time = 60){
+function VALID_SESSION($input="DEFAULT" , $time = 1800){
     session_start();
     if(empty($_SESSION["$input"])){
         return false;
