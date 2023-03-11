@@ -8,6 +8,7 @@ CREATE_DATABASE('library');
 CREATE_TABLE_USER('library', 'Users');
 
 if(VALID_SESSION('admin')==false){
+    SESSION_DESTROYER();
     header("location:AdminLogin.php");
 }
 

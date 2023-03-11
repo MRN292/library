@@ -12,6 +12,7 @@ require 'CRUD.php';
 
 
 if(VALID_SESSION('admin')==false){
+    SESSION_DESTROYER();
     header("location:AdminLogin.php");
 }
 // echo var_dump(VALID_SESSION('admin', 5));

@@ -344,6 +344,10 @@ function VALID_SESSION($input="DEFAULT" , $time = 10){
     return true;
 }
 
+function SESSION_DESTROYER(){
+    session_unset();
+    session_destroy();
+}
 
 
 ?>

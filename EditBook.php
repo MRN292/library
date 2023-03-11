@@ -4,6 +4,8 @@
 require 'FUNC_VALID.php';
 require 'CRUD.php';
 if(VALID_SESSION('admin')==false){
+    SESSION_DESTROYER();
+    
     header("location:AdminLogin.php");
 }
 

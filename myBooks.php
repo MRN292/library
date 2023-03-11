@@ -3,6 +3,7 @@
 require 'FUNC_VALID.php';
 require 'CRUD.php';
 if (VALID_SESSION('user') == false) {
+    SESSION_DESTROYER();
     header("Location:index.php");
 }
 

@@ -1,21 +1,19 @@
 <?php
 
-
+// echo $_SESSION['username'];
 require 'FUNC_VALID.php';
 require 'CRUD.php';
 
-CREATE_DATABASE('library');
-CREATE_TABLE_BOOK('library', 'Books');
-
-if(VALID_SESSION('admin')==false){
-    header("location:AdminLogin.php");
+if (VALID_SESSION('user') == false) {
+    SESSION_DESTROYER();
+    header("Location:index.php");
 }
 
-if (isset($_POST['delete'])) {
-
-    $id = $_POST['delete'];
-    DeleteR('library', 'Books', $id);
-    header("Refresh:0; url=showBooks.php");
+CREATE_DATABASE('library');
+CREATE_TABLE_RENTED_RECEIVE('library', 'RandR');
+$InUser;
+if (isset($_GET['username'])) {
+    $InUser = $_GET['username'];
 }
 
 ?>
@@ -24,17 +22,38 @@ if (isset($_POST['delete'])) {
 <html lang="en" dir="rtl">
 
 <head>
-    <meta charset="UTF-8" dir="rtl">
+    <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>کتاب ها</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
     <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js'></script>
+    <title>پنل کاریری</title>
 </head>
 
-<body style="margin-top:2%">
+<body>
+    <?php if (isset($_GET['Err'])) {
+        if ($_GET['Err'] == 1) {
+            $Err = "انجام شد";
+        } else {
+            $Err = "موجودی اتمام یافته است";
+        }
+        echo "
+                <div class='alert alert-warning alert-dismissible fale show' role='alert'>
+                <strong>$Err</strong>
+                <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close' ></strong>
+                </div>
+                ";
 
+    } ?>
 
+    <br>
+
+    <center>
+        <h3>
+            پنل کاربری
+        </h3>
+    </center>
+    <hr>
     <div style="margin-right:1%" class="col-sm-3 d-inline-flex">
 
         <form action="" method="GET" dir='ltr'>
@@ -81,27 +100,27 @@ if (isset($_POST['delete'])) {
 
     <div class="d-sm-inline-flex" style="margin-right:12%">
         <form action="" method="get">
-            
 
-            ترسناک &nbsp;<input class='form-check-input mt-2' type='radio' name='genreF' value ='tars' <?php if (isset($_GET['genreF']) && !empty($_GET['EnPost'])) {
+
+            ترسناک &nbsp;<input class='form-check-input mt-2' type='radio' name='genreF' value='tars' <?php if (isset($_GET['genreF']) && !empty($_GET['EnPost'])) {
                 echo "checked";
             } ?>>
 
             &nbsp;&nbsp;&nbsp;&nbsp;
 
-            کلاسیک &nbsp;<input class='form-check-input mt-2' type='radio' name='genreF' value ='classic' <?php if (isset($_GET['genreF']) && !empty($_GET['EnComment'])) {
+            کلاسیک &nbsp;<input class='form-check-input mt-2' type='radio' name='genreF' value='classic' <?php if (isset($_GET['genreF']) && !empty($_GET['EnComment'])) {
                 echo "checked";
             } ?>>
 
             &nbsp;&nbsp;&nbsp;&nbsp;
 
-            جنایی &nbsp;<input class='form-check-input mt-2' type='radio' name='genreF' value ='kill' <?php if (isset($_GET['genreF']) && !empty($_GET['EnComment'])) {
+            جنایی &nbsp;<input class='form-check-input mt-2' type='radio' name='genreF' value='kill' <?php if (isset($_GET['genreF']) && !empty($_GET['EnComment'])) {
                 echo "checked";
             } ?>>
 
             &nbsp;&nbsp;&nbsp;&nbsp;
 
-            عاشقانه &nbsp;<input class='form-check-input mt-2' type='radio' name='genreF' value ='love' <?php if (isset($_GET['genreF']) && !empty($_GET['EnComment'])) {
+            عاشقانه &nbsp;<input class='form-check-input mt-2' type='radio' name='genreF' value='love' <?php if (isset($_GET['genreF']) && !empty($_GET['EnComment'])) {
                 echo "checked";
             } ?>>
 
@@ -110,23 +129,19 @@ if (isset($_POST['delete'])) {
 
 
             <input type="submit" class="btn btn-primary btn-sm" name="filter" value="فیلتر کردن">
-            <a href="/library/showBooks.php" class="btn btn-danger  btn-sm" role="button">تازه سازی</a>
+            <a href="/library/user.php?username=<?php echo $InUser; ?>" class="btn btn-danger  btn-sm" role="button">تازه سازی</a>
         </form>
     </div>
 
     <hr>
 
-    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class='d-flex'>
-        <a style="margin-right:1%" role="button" href="/library/CreateBook.php" class="btn btn-outline-success">افزودن
-            کتاب</a>
+    <form action="EditUser.php" method="post">
+        <button name="edituser" value="<?php echo $InUser; ?>" class="btn btn-outline-success">ویرایش
+            اطلاعات</button>
+        <a href="/library/myBooks.php?username=<?php echo $InUser; ?>" class="btn btn-outline-primary">کتاب های من</a>
     </form>
 
 
-
-
-    <center>
-        <label class="col-form-label">لیست کتاب ها</label>
-    </center>
 
     <table dir="ltr" class='table table-boarderd'>
         <thead>
@@ -146,6 +161,7 @@ if (isset($_POST['delete'])) {
             <?php
 
 
+            // $quaryU = Read('library', 'users', '*', $_GET['username']);
             if (isset($_GET['search'])) {
                 $quary = BOOK_SEARCHER('library', 'Books', $_GET['search']);
 
@@ -182,12 +198,11 @@ if (isset($_POST['delete'])) {
                                 <?php echo $stock; ?>
                             </td>
                             <td>
-                                <form method='post' class='d-sm-inline-flex' action="/library/showBooks.php">
-                                    <button name="delete" value="<?php echo $id; ?>" class="btn btn-outline-danger">حذف</button>
-                                </form>
+                                <?php $data = array($id, $InUser); ?>
 
-                                <form method='post' class='d-sm-inline-flex' action="/library/EditBook.php">
-                                    <button name="edit" value="<?php echo $id; ?>" class="btn btn-outline-success">ویرایش</button>
+                                <form action="bookOperation.php" method='post' class='d-sm-inline-flex'>
+                                    <button name="rent" value="<?php echo htmlspecialchars(json_encode($data)); ?>"
+                                        class="btn btn-outline-dark">اجاره</button>
                                 </form>
 
                             </td>
@@ -202,7 +217,7 @@ if (isset($_POST['delete'])) {
 
                 if (isset($_GET['sort'])) {
                     if ($_GET['sort'] == "reset") {
-                        header("Refresh:0; url=showBooks.php");
+                        header("Refresh:0; url=user.php");
 
                     }
 
@@ -243,12 +258,11 @@ if (isset($_POST['delete'])) {
                                         <?php echo $stock; ?>
                                     </td>
                                     <td>
-                                        <form method='post' class='d-sm-inline-flex' action="/library/showBooks.php">
-                                            <button name="delete" value="<?php echo $id; ?>" class="btn btn-outline-danger">حذف</button>
-                                        </form>
+                                        <?php $data = array($id, $InUser); ?>
 
-                                        <form method='post' class='d-sm-inline-flex' action="/library/EditBook.php">
-                                            <button name="edit" value="<?php echo $id; ?>" class="btn btn-outline-success">ویرایش</button>
+                                        <form action="bookOperation.php" method='post' class='d-sm-inline-flex'>
+                                            <button name="rent" value="<?php echo htmlspecialchars(json_encode($data)); ?>"
+                                                class="btn btn-outline-dark">اجاره</button>
                                         </form>
 
                                     </td>
@@ -298,12 +312,11 @@ if (isset($_POST['delete'])) {
                                         <?php echo $stock; ?>
                                     </td>
                                     <td>
-                                        <form method='post' class='d-sm-inline-flex' action="/library/showBooks.php">
-                                            <button name="delete" value="<?php echo $id; ?>" class="btn btn-outline-danger">حذف</button>
-                                        </form>
+                                        <?php $data = array($id, $InUser); ?>
 
-                                        <form method='post' class='d-sm-inline-flex' action="/library/EditBook.php">
-                                            <button name="edit" value="<?php echo $id; ?>" class="btn btn-outline-success">ویرایش</button>
+                                        <form action="bookOperation.php" method='post' class='d-sm-inline-flex'>
+                                            <button name="rent" value="<?php echo htmlspecialchars(json_encode($data)); ?>"
+                                                class="btn btn-outline-dark">اجاره</button>
                                         </form>
 
                                     </td>
@@ -353,12 +366,11 @@ if (isset($_POST['delete'])) {
                                         <?php echo $stock; ?>
                                     </td>
                                     <td>
-                                        <form method='post' class='d-sm-inline-flex' action="/library/showBooks.php">
-                                            <button name="delete" value="<?php echo $id; ?>" class="btn btn-outline-danger">حذف</button>
-                                        </form>
+                                        <?php $data = array($id, $InUser); ?>
 
-                                        <form method='post' class='d-sm-inline-flex' action="/library/EditBook.php">
-                                            <button name="edit" value="<?php echo $id; ?>" class="btn btn-outline-success">ویرایش</button>
+                                        <form action="bookOperation.php" method='post' class='d-sm-inline-flex'>
+                                            <button name="rent" value="<?php echo htmlspecialchars(json_encode($data)); ?>"
+                                                class="btn btn-outline-dark">اجاره</button>
                                         </form>
 
                                     </td>
@@ -408,14 +420,12 @@ if (isset($_POST['delete'])) {
                                         <?php echo $stock; ?>
                                     </td>
                                     <td>
-                                        <form method='post' class='d-sm-inline-flex' action="/library/showBooks.php">
-                                            <button name="delete" value="<?php echo $id; ?>" class="btn btn-outline-danger">حذف</button>
-                                        </form>
+                                        <?php $data = array($id, $InUser); ?>
 
-                                        <form method='post' class='d-sm-inline-flex' action="/library/EditBook.php">
-                                            <button name="edit" value="<?php echo $id; ?>" class="btn btn-outline-success">ویرایش</button>
+                                        <form action="bookOperation.php" method='post' class='d-sm-inline-flex'>
+                                            <button name="rent" value="<?php echo htmlspecialchars(json_encode($data)); ?>"
+                                                class="btn btn-outline-dark">اجاره</button>
                                         </form>
-
                                     </td>
                                 </tr>
 
@@ -464,12 +474,11 @@ if (isset($_POST['delete'])) {
                                         <?php echo $stock; ?>
                                     </td>
                                     <td>
-                                        <form method='post' class='d-sm-inline-flex' action="/library/showBooks.php">
-                                            <button name="delete" value="<?php echo $id; ?>" class="btn btn-outline-danger">حذف</button>
-                                        </form>
+                                        <?php $data = array($id, $InUser); ?>
 
-                                        <form method='post' class='d-sm-inline-flex' action="/library/EditBook.php">
-                                            <button name="edit" value="<?php echo $id; ?>" class="btn btn-outline-success">ویرایش</button>
+                                        <form action="bookOperation.php" method='post' class='d-sm-inline-flex'>
+                                            <button name="rent" value="<?php echo htmlspecialchars(json_encode($data)); ?>"
+                                                class="btn btn-outline-dark">اجاره</button>
                                         </form>
 
                                     </td>
@@ -521,12 +530,11 @@ if (isset($_POST['delete'])) {
                                             <?php echo $stock; ?>
                                         </td>
                                         <td>
-                                            <form method='post' class='d-sm-inline-flex' action="/library/showBooks.php">
-                                                <button name="delete" value="<?php echo $id; ?>" class="btn btn-outline-danger">حذف</button>
-                                            </form>
+                                            <?php $data = array($id, $InUser); ?>
 
-                                            <form method='post' class='d-sm-inline-flex' action="/library/EditBook.php">
-                                                <button name="edit" value="<?php echo $id; ?>" class="btn btn-outline-success">ویرایش</button>
+                                            <form action="bookOperation.php" method='post' class='d-sm-inline-flex'>
+                                                <button name="rent" value="<?php echo htmlspecialchars(json_encode($data)); ?>"
+                                                    class="btn btn-outline-dark">اجاره</button>
                                             </form>
 
                                         </td>
@@ -543,14 +551,19 @@ if (isset($_POST['delete'])) {
 
                 }
             }
+
+
+
             ?>
+
+
 
 
         </tbody>
 
 
     </table>
-    <a style="margin-top:2% ; margin-right:1%" href="/library/admin.php" role="button" class="btn btn-dark">بازگشت</a>
+    <a href="/library/index.php" class="btn btn-danger">خروج</a>
 
 
 
