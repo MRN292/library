@@ -168,7 +168,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <button type="submit" class="btn btn-outline-primary" style="margin-top:0.1%">ثبت نام</button>
                 </div>
                 <div class="col-sm-3 d-grid " style="margin-top:0.1%">
-                    <a role="button" class="btn btn-outline-secondary" href="/library/LOGIN.php">ورود</a>
+                    <a role="button" class="btn btn-outline-secondary" href="/library/index.php">ورود</a>
                 </div>
             </center>
 

@@ -5,7 +5,7 @@ require 'FUNC_VALID.php';
 require 'CRUD.php';
 
 if (VALID_SESSION('user') == false) {
-    header("Location:LOGIN.php");
+    header("Location:index.php");
 }
 
 CREATE_DATABASE('library');
@@ -562,7 +562,7 @@ if (isset($_GET['username'])) {
 
 
     </table>
-    <a href="/library/LOGIN.php" class="btn btn-danger">خروج</a>
+    <a href="/library/index.php" class="btn btn-danger">خروج</a>
 
 
 

@@ -3,7 +3,7 @@
 require 'FUNC_VALID.php';
 require 'CRUD.php';
 if (VALID_SESSION('user') == false) {
-    header("Location:LOGIN.php");
+    header("Location:index.php");
 }
 
 
